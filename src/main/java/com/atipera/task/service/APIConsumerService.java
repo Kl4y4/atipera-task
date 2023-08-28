@@ -23,34 +23,28 @@ public class APIConsumerService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public String GetHello() {
-        return "Hello world!";
-    }
-
-    public String GetRepos(String username) throws JsonProcessingException {
+    public String getRepos(String username) throws JsonProcessingException {
 
         RepoExternalObj[] response = restTemplate.getForObject(
                 "https://api.github.com/users/" + username + "/repos", RepoExternalObj[].class
         );
 
-        List<ResponseObj> responseObjs = ProcessResponse(response);
+        List<ResponseObj> responseObjs = processResponse(response);
 
         return objectMapper.writeValueAsString(responseObjs);
     }
 
-    private List<ResponseObj> ProcessResponse(RepoExternalObj[] response) {
+    private List<ResponseObj> processResponse(RepoExternalObj[] response) {
 
         response = Arrays.stream(response).filter(res -> !res.fork()).toArray(RepoExternalObj[]::new);
 
-        List<Branch[]> branches = FetchBranches(Arrays.stream(response).toList());
+        List<Branch[]> branches = fetchBranches(Arrays.stream(response).toList());
         ListIterator<Branch[]> branchListIterator = branches.listIterator();
 
-        List<ResponseObj> repos = Arrays.stream(response).map(res -> new ResponseObj(res.name(), res.owner().login(), branchListIterator.next())).toList();
-
-        return repos;
+        return Arrays.stream(response).map(res -> new ResponseObj(res.name(), res.owner().login(), branchListIterator.next())).toList();
     }
 
-    private List<Branch[]> FetchBranches(List<RepoExternalObj> response) {
+    private List<Branch[]> fetchBranches(List<RepoExternalObj> response) {
 
         List<Branch[]> branches = new ArrayList<>();
 
