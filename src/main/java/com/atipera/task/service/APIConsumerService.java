@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,17 +31,18 @@ public class APIConsumerService {
                 "https://api.github.com/users/" + username + "/repos", RepoExternalObj[].class
         );
 
-        response = Arrays.stream(response).filter(res -> !res.fork()).toArray(RepoExternalObj[]::new);
-
-        List<ResponseObj> responseObjs = new ArrayList<>();
-        for (RepoExternalObj repo : response) {
-            ResponseObj obj = new ResponseObj(
-                    repo.name(), repo.owner().login(), new Branch[]{}
-            );
-            responseObjs.add(obj);
-        }
+        List<ResponseObj> responseObjs = ProcessResponse(response);
 
         return objectMapper.writeValueAsString(responseObjs);
+    }
+
+    private List<ResponseObj> ProcessResponse(RepoExternalObj[] response) {
+
+        response = Arrays.stream(response).filter(res -> !res.fork()).toArray(RepoExternalObj[]::new);
+
+        List<ResponseObj> repos = Arrays.stream(response).map(res -> new ResponseObj(res.name(), res.owner().login(), new Branch[] {})).toList();
+
+        return repos;
     }
 
 }
