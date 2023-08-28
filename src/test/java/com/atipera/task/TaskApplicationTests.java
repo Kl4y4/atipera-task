@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
@@ -55,7 +54,7 @@ class TaskApplicationTests {
 
 		HttpRequest httpRequest = HttpRequest.newBuilder()
 				.uri(new URI("http://localhost:8080/repos?username=kl4y4"))
-				.header("accept", "application/xml")
+				.header("accept", "application/json")
 				.GET()
 				.build();
 
