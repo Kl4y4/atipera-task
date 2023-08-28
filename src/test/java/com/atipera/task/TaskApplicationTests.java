@@ -10,11 +10,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class TaskApplicationTests {
 
 	@Test
-	public void notGivenUsername_whenEndpointIsCalled_then400IsReceived() throws URISyntaxException, IOException, InterruptedException {
+	void notGivenUsername_whenEndpointIsCalled_then400IsReceived() throws URISyntaxException, IOException, InterruptedException {
 
 		HttpRequest httpRequest = HttpRequest.newBuilder()
 				.uri(new URI("http://localhost:8080/repos"))
@@ -26,12 +28,12 @@ class TaskApplicationTests {
 
 		HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-		assert response.statusCode() == 400;
+		assertEquals(400, response.statusCode());
 
 	}
 
 	@Test
-	public void givenWrongHeader_whenEndpointIsCalled_then406IsReceived() throws URISyntaxException, IOException, InterruptedException {
+	void givenWrongHeader_whenEndpointIsCalled_then406IsReceived() throws URISyntaxException, IOException, InterruptedException {
 
 		HttpRequest httpRequest = HttpRequest.newBuilder()
 				.uri(new URI("http://localhost:8080/repos?username=kl4y4"))
@@ -45,12 +47,12 @@ class TaskApplicationTests {
 
 		System.out.print(response.statusCode());
 
-		assert response.statusCode() == 406;
+		assertEquals(406, response.statusCode());
 
 	}
 
 	@Test
-	public void givenRightParams_whenEndpointIsCalled_then200IsReceived() throws URISyntaxException, IOException, InterruptedException {
+	void givenRightParams_whenEndpointIsCalled_then200IsReceived() throws URISyntaxException, IOException, InterruptedException {
 
 		HttpRequest httpRequest = HttpRequest.newBuilder()
 				.uri(new URI("http://localhost:8080/repos?username=kl4y4"))
@@ -64,7 +66,8 @@ class TaskApplicationTests {
 
 		System.out.print(response.statusCode());
 
-		assert response.statusCode() == 200;
+        assertEquals(200, response.statusCode());
+
 
 	}
 
