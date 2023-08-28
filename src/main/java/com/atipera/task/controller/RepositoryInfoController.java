@@ -30,10 +30,7 @@ public class RepositoryInfoController {
     }
 
     private boolean CheckHeaders(String acceptHeader) {
-        if (!acceptHeader.contains("application/json")) {
-            return false;
-        }
-        return true;
+        return acceptHeader.contains("application/json");
     }
 
 }
