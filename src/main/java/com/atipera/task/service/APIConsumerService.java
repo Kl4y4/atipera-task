@@ -6,6 +6,7 @@ import com.atipera.task.model.ResponseObj;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +24,7 @@ public class APIConsumerService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
+    @Cacheable(cacheNames = "Repos")
     public String getRepos(String username) throws JsonProcessingException {
 
         RepoExternalObj[] response = restTemplate.getForObject(
